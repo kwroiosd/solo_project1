@@ -1,0 +1,2 @@
+create a model file in ideas that will query the amount of times a post has been liked by a user
+create a controller and model in ideas to edit and destroy a post as long as user is in sessiion
