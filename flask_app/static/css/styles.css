@@ -1,0 +1,21 @@
+.button {
+    height: 50px;
+    width: 120px;
+    background-color: royalblue;
+    border: 1px solid black;
+}
+
+a {
+    color: royalblue;
+}
+
+.title {
+    text-shadow: 10px;
+    color: lime;
+
+}
+
+.lightbulb {
+    height: 80px;
+    
+}

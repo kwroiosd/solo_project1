@@ -53,6 +53,16 @@ class User():
         print(results)
         return cls(results[0])
 
+    @classmethod
+    def get_by_idea(cls, data):
+        query = "SELECT * FROM ideas LEFT JOIN users ON ideas.user_id = users.id WHERE ideas.id = (user_id)"
+        results = connectToMySQL(cls.db).query_db(query,data)
+        users = cls( results[0] )
+        for row in results:
+            users.append( cls(row))
+        print(results)
+        return users
+        
 
     @classmethod
     def get_by_email(cls,data):

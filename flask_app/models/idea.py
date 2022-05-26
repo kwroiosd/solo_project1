@@ -14,6 +14,9 @@ class Idea():
         self.user_id = ['user_id']
         self.occrances = []
         self.creator = None
+
+        self.user = []
+
     @classmethod
     def save(cls,data):
         query = "INSERT INTO ideas (content, user_id) VALUES (%(content)s, %(user_id)s);"
@@ -44,13 +47,37 @@ class Idea():
 
     @classmethod
     def get_one_with_user(cls,data):
-        query = "SELECT * FROM ideas JOIN users ON ideas.user_id = %(id)s;"
+        query = "SELECT * FROM users LEFT JOIN ideas ON users.id = ideas.user_id WHERE ideas.user_id = users.id;"
         results = connectToMySQL(cls.db).query_db(query,data)
-        if len(results) < 1:
-            return False
-        print(results)
-        return cls(results[0])
+        ideas = cls( results[0] )
+        for row in results:
+            ideas.append( cls(row) )
+        print(ideas)
+        return results
 
+    @classmethod
+    def get_idea_with_user( cls , data ):
+        query = "SELECT * FROM ideas LEFT JOIN users ON ideas.user_id = users.id WHERE ideas.id = %(id)s;"
+        results = connectToMySQL(cls.db).query_db(query,data)
+        one_idea = []
+    
+        idea = cls( results[0] )
+        for row in results:
+            
+            user_data = {
+                "id" : row["users.id"],
+                "first_name" : row["first_name"],
+                "last_name" : row["last_name"],
+                "email" : row["email"],
+                "password" : row["password"],
+                "created_at" : row["users.created_at"],
+                "updated_at" : row["users.updated_at"],
+                "user_id" : ["user_id"]
+            }
+            idea.user.append( user.User( user_data ) )
+        print(user_data["first_name"])
+        return one_idea
+        
     @classmethod
     def get_all_ideas_with_creator(cls):
         query = "SELECT * FROM ideas JOIN users ON ideas.user_id = (users.id);"
@@ -81,7 +108,9 @@ class Idea():
     def get_by_id(cls,data):
         query = "SELECT * FROM ideas WHERE ideas.id = %(id)s;"
         results = connectToMySQL(cls.db).query_db(query,data)
+        print(results)
         return cls(results[0])
+        
 
     @classmethod
     def count_ideas(cls, data):

@@ -52,10 +52,8 @@ def show_idea(id):
     data = {
         "id": id 
     }
-    user_data = {
-        "id": session['user_id']
-    }
-    return render_template("idea.html",idea=Idea.get_all_ideas_with_creator(),user=User.get_by_id(user_data))
+    
+    return render_template("idea.html",idea=Idea.get_by_id(data))
 
 @app.route('/destroy/idea/<int:id>')
 def destroy_idea(id):
